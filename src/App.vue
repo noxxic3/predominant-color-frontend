@@ -1,6 +1,6 @@
 <template>
   <h1 style="color: DarkGreen;">Europe Language Jobs: technical test</h1>
-  <colors></colors>
+  <image-colors></image-colors>
 </template>
 
 <script>

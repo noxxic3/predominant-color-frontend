@@ -1,15 +1,16 @@
 <template>
   <h2>Image</h2>
-
-  <!--<form action="/">-->
-    <label for="i_file">Add image:</label><br>                                                      
-    <input type="file" id="i_file" name="i_file"  ref="file"   v-on:change="attach()">   <!--  enctype="multipart/form-data" -->
+  <form v-on:submit.prevent="sendToBackend()">     
+    <label for="image_file" style="cursor: pointer;"  class="addImgButton">Add image</label>            <!-- APUNTES -->                                             
+    <input type="file" accept="image/gif, image/jpeg, image/png" id="image_file" name="image_file"  ref="file"   v-on:change="attach($event)"  style="display: none;">    
     <br><br> 
+    <!--<button>Send</button>-->                                                        <!-- APUNTES -->
+    <input type="submit" value="Send">
+    <!--<button v-on:click="sendToBackend()">Send</button>-->                           <!-- APUNTES -->
+  </form> 
+  <img id="image_show" ref="image_show" width="200" />
 
-    <button v-on:click="sendToBackend()">Send</button>
-  <!--</form>--> 
-
-  <p class="loadMessage" v-show="loading">Calculating the color...</p>
+  <p class="loadMessage" v-if="loading">Calculating the color...</p>
   
   <h2>Closest color</h2>
   <div class="closestColor" v-bind:style="{backgroundColor: closestColorValue}">         <!-- APUNTES -->
@@ -22,15 +23,13 @@
       <p class="colorText">{{key}}</p>
     </div>
   </div>
-
 </template>
 
 <script>
 import axios from 'axios';
 
 export default {
-  name: 'Colors',
-
+  name: 'Image colors',
   data(){
     return {
       image: null,
@@ -57,33 +56,33 @@ export default {
       loading: false,
     }
   },
-
   methods: {
     attach(){    
+      // Assign the file to the data that will be sent in the form
       this.image = this.$refs.file.files[0];                                        // We only want to send the only file that has been attached.
+      // Assign the image to the img element through which it will be displayed 
+      var imageShow = this.$refs.image_show;
+      imageShow.src = URL.createObjectURL(event.target.files[0]);
+
       console.log('>>>> element files array   >>>> ', this.$refs.file);             // If we see the .files property of the type="file" element, we see that it is an array that will have all the files that have been added to that element.
       console.log('>>>> element file selected >>>> ', this.$refs.file.files[0]);
     },
     sendToBackend(){
-      
       if (this.validatedForm()) { 
-        
         this.loading = true;  
         this.closestColorName = null;
         this.closestColorValue = null;   
 
         // POST request with file
-        let formData = new FormData();                               //  ++++++++++++     // Para enviar archivos a través de AJAX, tenemos que usar un objeto de tipo FormData                 
-        formData.append('image', this.image);               //  ++++++++++++      <<----  Aquí le asignamos el valor del file del formulario que ahora sí lo adjuntamos y en attach() (función que creamos para escoger el file del array del elemento input type="file") cojemos el file que queremos. Antes no lo adjuntaba y se asignaba la variable  this.userImage  entera sin coger del array files el que quería.
+        let formData = new FormData();                         
+        formData.append('image', this.image);           
         console.log('>> formData >> ', formData);
 
         axios({
           method: 'post',
           url: 'images',
           headers: {
-            //'Authorization': 'Bearer ' + response_data_acces_token,
-            //'Content-type': 'application/json',
-            'Content-Type': 'multipart/form-data'                         //  ++++++++++++       // Para enviar archivos a través de AJAX, tenemos que poner este valor de header que equivale al valor del atributo  enctype="multipart/form-data"  que ponemos en el elemento <form> cuando queremos enviar archivos.
+            'Content-Type': 'multipart/form-data'                        
           },    
           data: formData,                                      
         })
@@ -96,9 +95,7 @@ export default {
           this.closestColorValue = res.data[this.closestColorName];           // APUNTES  // Get the value of the only property of the received object  
         })                                                  
         .catch(error => console.log(error.response)); 
-        
-      } 
-      
+      }
     },
     validatedForm(){
       if (this.image) { 
@@ -108,10 +105,8 @@ export default {
         return false;
       }
     }
-
   }
 }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -119,7 +114,7 @@ export default {
 
 .palette {
   margin: auto;
-  width: 80%;
+  width: 95%;
 
   display: flex;
   flex-wrap: wrap;
@@ -160,4 +155,21 @@ export default {
   animation-iteration-count: infinite;  
 }
 
+
+.addImgButton {
+  background-color: lightgrey;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+#image_show {
+  margin-top: 20px;
+}
+
+
+@media only screen and (min-width: 600px) {
+  .palette {
+    width: 80%;
+  }
+}
 </style>

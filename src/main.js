@@ -3,13 +3,11 @@ import App from './App.vue'
 
 
 import axios from 'axios';
-axios.defaults.baseURL = 'http://localhost/Laravel/predominant-color-backend/public/api/';        
-                        // http://localhost/Laravel/predominant-color-backend/public/api/images/1
-
+axios.defaults.baseURL = 'http://localhost/Laravel/predominant-color-backend/public/api/';
 
 const app = createApp(App); 
 
-import Colors from './components/Colors.vue'
-app.component('colors', Colors); 
+import Image_colors from './components/Image_colors.vue'
+app.component('image-colors', Image_colors); 
 
 app.mount('#app');
