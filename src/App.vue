@@ -1,5 +1,5 @@
 <template>
-  <h1>Europe Language Jobs prueba técnica</h1>
+  <h1 style="color: DarkGreen;">Europe Language Jobs: technical test</h1>
   <colors></colors>
 </template>
 
@@ -15,5 +15,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin-top: 60px;
+  text-align: center;
 }
 </style>
