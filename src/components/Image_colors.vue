@@ -1,19 +1,17 @@
 <template>
   <h2>Image</h2>
   <form v-on:submit.prevent="sendToBackend()">     
-    <label for="image_file" style="cursor: pointer;"  class="addImgButton">Add image</label>            <!-- APUNTES -->                                             
+    <label for="image_file" style="cursor: pointer;"  class="addImgButton">Add image</label>                                               
     <input type="file" accept="image/gif, image/jpeg, image/png" id="image_file" name="image_file"  ref="file"   v-on:change="attach($event)"  style="display: none;">    
     <br><br> 
-    <!--<button>Send</button>-->                                                        <!-- APUNTES -->
     <input type="submit" value="Send">
-    <!--<button v-on:click="sendToBackend()">Send</button>-->                           <!-- APUNTES -->
   </form> 
   <img id="image_show" ref="image_show" width="200" />
 
   <p class="loadMessage" v-if="loading">Calculating the color...</p>
   
   <h2>Closest color</h2>
-  <div class="closestColor" v-bind:style="{backgroundColor: closestColorValue}">         <!-- APUNTES -->
+  <div class="closestColor" v-bind:style="{backgroundColor: closestColorValue}"> 
     <p class="colorText">{{closestColorName}}</p>
   </div>
   
@@ -91,8 +89,8 @@ export default {
           console.log(res.data);
           console.log(res.status);
           this.loading = false;
-          this.closestColorName = Object.keys(res.data)[0];                   // APUNTES  // Get the unknown name (key) of the only property of the received object  
-          this.closestColorValue = res.data[this.closestColorName];           // APUNTES  // Get the value of the only property of the received object  
+          this.closestColorName = Object.keys(res.data)[0];                   // Get the unknown name (key) of the only property of the received object  
+          this.closestColorValue = res.data[this.closestColorName];           // Get the value of the only property of the received object  
         })                                                  
         .catch(error => console.log(error.response)); 
       }
